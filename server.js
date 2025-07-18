@@ -17,12 +17,12 @@ const menuItems = [
 // ออเดอร์ที่ถูกส่งมา
 let orders = [];
 
-// ส่งเมนูให้ frontend
+// ✅ เส้นทางส่งเมนูให้ frontend
 app.get('/menu', (req, res) => {
   res.json(menuItems);
 });
 
-// เพิ่มออเดอร์ใหม่
+// ✅ เพิ่มออเดอร์ใหม่
 app.post('/order', (req, res) => {
   const { table, items, note } = req.body;
   const newOrder = {
@@ -31,19 +31,19 @@ app.post('/order', (req, res) => {
     items,
     note,
     status: 'pending',
-    time: new Date().toLocaleTimeString()
+    timestamp: new Date() // ✅ ส่งเป็น Date object
   };
   orders.push(newOrder);
   console.log('New order:', newOrder);
   res.sendStatus(200);
 });
 
-// ✅ เพิ่ม endpoint นี้สำหรับดึงรายการออเดอร์ทั้งหมด
+// ✅ ดึงรายการออเดอร์ทั้งหมด
 app.get('/order', (req, res) => {
   res.json(orders);
 });
 
-// เริ่มต้นเซิร์ฟเวอร์
+// ✅ เริ่มเซิร์ฟเวอร์
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running at http://localhost:${PORT}`);
 });
