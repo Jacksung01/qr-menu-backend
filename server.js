@@ -1,27 +1,28 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const PORT = 3001;
+
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
 
-// เมนูอาหารจำลอง
+// ตัวอย่างรายการอาหาร
 const menuItems = [
-  { id: 1, name: "ข้าวกระเพรา", price: 60, category: "อาหารจานเดียว" },
-  { id: 2, name: "ต้มยำกุ้ง", price: 90, category: "ต้ม/แกง" },
-  { id: 3, name: "ชาเย็น", price: 25, category: "เครื่องดื่ม" }
+  { id: 1, name: "ข้าวกะเพรา", price: 60 },
+  { id: 2, name: "ต้มยำกุ้ง", price: 90 },
+  { id: 3, name: "ชาเย็น", price: 25 }
 ];
 
-// ออเดอร์จำลอง
+// ออเดอร์ที่ถูกส่งมา
 let orders = [];
 
-// ส่งเมนูให้ Frontend
+// ส่งเมนูให้ frontend
 app.get('/menu', (req, res) => {
   res.json(menuItems);
 });
 
-// รับออเดอร์
+// เพิ่มออเดอร์ใหม่
 app.post('/order', (req, res) => {
   const { table, items, note } = req.body;
   const newOrder = {
@@ -29,19 +30,20 @@ app.post('/order', (req, res) => {
     table,
     items,
     note,
-    status: "pending",
-    created_at: new Date()
+    status: 'pending',
+    time: new Date().toLocaleTimeString()
   };
   orders.push(newOrder);
-  res.json({ success: true, order: newOrder });
+  console.log('New order:', newOrder);
+  res.sendStatus(200);
 });
 
-// ดูออเดอร์ทั้งหมด
-app.get('/orders', (req, res) => {
+// ✅ เพิ่ม endpoint นี้สำหรับดึงรายการออเดอร์ทั้งหมด
+app.get('/order', (req, res) => {
   res.json(orders);
 });
 
-// เริ่มต้น server
+// เริ่มต้นเซิร์ฟเวอร์
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running at http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
